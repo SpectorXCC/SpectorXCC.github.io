@@ -1,0 +1,123 @@
+# ① 部署前改成你的公网网址，末尾保留 /。
+# 用户站点：https://你的用户名.github.io/
+# 项目站点：https://你的用户名.github.io/仓库名/
+# GitHub Actions 也会从 Pages 自动获取实际 baseURL，避免项目站点丢失样式。
+baseURL = "https://spectorxcc.github.io/"
+title = "SpectorXCC 的个人站"
+theme = "PaperMod"
+locale = "zh-CN"
+defaultContentLanguage = "zh"
+hasCJKLanguage = true
+timeZone = "Asia/Shanghai"
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 6
+
+# 课程评分项：JSON 是搜索索引，不能删。
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[markup.highlight]
+  noClasses = false
+  lineNos = false
+[markup.goldmark.renderer]
+  unsafe = false
+[caches.images]
+  dir = ":cacheDir/images"
+
+[params]
+  # ② 站点说明与作者名。
+  author = "SpectorXCC"
+  description = "记录 Linux 学习、课程实验和代码实践。"
+  keywords = ["Linux", "学习笔记", "Hugo", "课程实验"]
+  mainSections = ["posts"]
+  defaultTheme = "dark"
+  disableThemeToggle = false
+  DateFormat = "2006.01.02"
+  ShowReadingTime = true
+  ShowWordCount = true
+  ShowCodeCopyButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowToc = true
+  TocOpen = true
+  ShowShareButtons = false
+  disableSpecial1stPost = true
+
+[params.label]
+  text = "SpectorXCC 的个人站"
+  icon = "images/mark.svg"
+  iconHeight = 25
+
+# ③ 首页简介；保留 homeInfoParams，课程会检查此项。
+[params.homeInfoParams]
+  Title = "你好，我是"
+  signature = "SpectorXCC"
+  Content = "这里记录我的 Linux 学习、课程实验和软件开发。"
+  eyebrow = "SPECTORXCC · PERSONAL SITE"
+
+# ④ 关于页个人资料。真实姓名、专业和个人照片需要你填写。
+[params.profile]
+  name = "待填写姓名"
+  major = "待填写专业"
+  school = "待填写学校"
+  photo = "images/avatar-placeholder.svg"
+  photoAlt = "个人照片占位图，请换成自己的照片"
+  tagline = "从命令行出发，记录学习中的每一步。"
+
+[params.assets]
+  favicon = "images/mark.svg"
+  favicon16x16 = "images/mark-16.png"
+  favicon32x32 = "images/mark-32.png"
+  apple_touch_icon = "images/mark-180.png"
+  safari_pinned_tab = "images/mark.svg"
+  theme_color = "#0d0e11"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/SpectorXCC"
+
+[params.fuseOpts]
+  isCaseSensitive = false
+  shouldSort = true
+  ignoreLocation = true
+  threshold = 0.35
+  minMatchCharLength = 1
+  keys = ["title", "summary", "content"]
+
+# 课程指定六个菜单，顺序从 10 到 60。
+[[menus.main]]
+  identifier = "home"
+  name = "首页"
+  url = "/"
+  weight = 10
+[[menus.main]]
+  identifier = "about"
+  name = "关于"
+  url = "/about/"
+  weight = 20
+[[menus.main]]
+  identifier = "tags"
+  name = "标签"
+  url = "/tags/"
+  weight = 30
+[[menus.main]]
+  identifier = "categories"
+  name = "分类"
+  url = "/categories/"
+  weight = 40
+[[menus.main]]
+  identifier = "archives"
+  name = "归档"
+  url = "/archives/"
+  weight = 50
+[[menus.main]]
+  identifier = "search"
+  name = "搜索"
+  url = "/search/"
+  weight = 60

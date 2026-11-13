@@ -1,0 +1,18 @@
+{{- with site.Params.profile }}
+<section class="profile-panel" aria-label="个人简介">
+  <div>
+    <p class="profile-kicker">ABOUT ME</p>
+    <h2>{{ .name }}</h2>
+    <p class="profile-tagline">{{ .tagline }}</p>
+    <dl class="profile-facts">
+      <dt>姓名</dt><dd>{{ .name }}</dd>
+      <dt>专业</dt><dd>{{ .major }}</dd>
+      <dt>学校</dt><dd>{{ .school }}</dd>
+    </dl>
+  </div>
+  <figure class="profile-photo">
+    <img src="{{ .photo | relURL }}" width="240" height="300" alt="{{ .photoAlt }}">
+    {{- if eq .photo "images/avatar-placeholder.svg" }}<figcaption>请替换为自己的个人照片</figcaption>{{- end }}
+  </figure>
+</section>
+{{- end }}

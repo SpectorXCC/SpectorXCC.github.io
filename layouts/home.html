@@ -1,0 +1,20 @@
+{{- define "main" }}
+{{- $posts := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- $posts = where $posts "Params.hiddenInHomeList" "ne" true }}
+<div class="site-home">
+  {{- partial "home_info.html" (dict "featured" (index ($posts | first 1) 0)) }}
+  <section class="recent-notes" aria-labelledby="recent-notes-title">
+    <div class="section-heading">
+      <h2 id="recent-notes-title">最近文章</h2>
+      {{- with site.GetPage "/posts" }}
+      <a href="{{ .RelPermalink }}">全部文章 <span aria-hidden="true">→</span></a>
+      {{- end }}
+    </div>
+    {{- range $i, $page := first 3 $posts }}
+      {{- partial "note-card.html" (dict "page" $page "number" (add $i 1)) }}
+    {{- else }}
+      <p class="empty-notes">这里会显示发布后的文章。</p>
+    {{- end }}
+  </section>
+</div>
+{{- end }}

@@ -1,0 +1,66 @@
+name: Build and deploy Hugo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source and PaperMod
+        uses: actions/checkout@v7
+        with:
+          # 课程评分关键项：必须同时拉取主题子模块。
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Read pinned Hugo version
+        id: version
+        shell: bash
+        run: echo "hugo=$(cat .hugo-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Hugo
+        # 使用课程认可的 Hugo 构建环境安装动作。
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ steps.version.outputs.hugo }}
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
+      - name: Build
+        # 自动适配 用户名.github.io/ 和 用户名.github.io/仓库名/。
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+        run: hugo --gc --minify --baseURL "${PAGES_BASE_URL%/}/"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

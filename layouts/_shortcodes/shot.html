@@ -1,0 +1,5 @@
+{{- $src := .Get "src" -}}
+<figure class="experiment-shot">
+  <img src="{{ $src | relURL }}" alt="{{ .Get "alt" }}" loading="lazy">
+  {{- with .Get "caption" }}<figcaption>{{ . }}</figcaption>{{- end }}
+</figure>

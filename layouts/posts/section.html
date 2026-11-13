@@ -1,0 +1,24 @@
+{{- define "main" }}
+<div class="notes-page">
+  <header class="notes-page-header">
+    {{- partial "breadcrumbs.html" . }}
+    <h1>{{ .Title }}</h1>
+    {{- with .Description }}<p>{{ . }}</p>{{ end }}
+  </header>
+  {{- with .Content }}<div class="post-content md-content">{{ . }}</div>{{ end }}
+  {{- $pager := .Paginate .RegularPagesRecursive }}
+  {{- $offset := mul (sub $pager.PageNumber 1) $pager.PagerSize }}
+  {{- range $i, $page := $pager.Pages }}
+    {{- partial "note-card.html" (dict "page" $page "number" (add $offset (add $i 1))) }}
+  {{- else }}
+    <p class="empty-notes">这里会显示发布后的文章。</p>
+  {{- end }}
+  {{- if gt $pager.TotalPages 1 }}
+  <nav class="notes-pagination" aria-label="文章分页">
+    {{- if $pager.HasPrev }}<a href="{{ $pager.Prev.URL }}">← 上一页</a>{{ end }}
+    <span>{{ $pager.PageNumber }} / {{ $pager.TotalPages }}</span>
+    {{- if $pager.HasNext }}<a href="{{ $pager.Next.URL }}">下一页 →</a>{{ end }}
+  </nav>
+  {{- end }}
+</div>
+{{- end }}

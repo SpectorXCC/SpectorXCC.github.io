@@ -1,0 +1,42 @@
+{{- with site.Params.homeInfoParams }}
+<section class="home-info personal-hero" aria-labelledby="intro-title">
+  <div class="hero-intro">
+    {{- with .eyebrow }}<p class="hero-eyebrow">{{ . }}</p>{{ end }}
+    <h1 id="intro-title">
+      {{- .Title }}
+      {{- with .signature }} <span class="hero-signature">{{ . }}</span>{{ end }}
+    </h1>
+    <div class="hero-description">{{ .Content | markdownify }}</div>
+    <div class="hero-actions">
+      {{- with site.GetPage "/posts" }}
+      <a class="hero-button hero-primary" href="{{ .RelPermalink }}">开始浏览 <span aria-hidden="true">→</span></a>
+      {{- end }}
+      {{- with site.GetPage "/about" }}
+      <a class="hero-button hero-secondary" href="{{ .RelPermalink }}">关于我</a>
+      {{- end }}
+    </div>
+    {{- if site.Params.socialIcons }}
+      {{- partial "social_icons.html" (dict) }}
+    {{- end }}
+  </div>
+  {{- with $.featured }}
+  <a class="article-window" href="{{ .RelPermalink }}" aria-label="阅读推荐文章：{{ .Title }}">
+    <div class="window-bar" aria-hidden="true">
+      <span class="window-dots"><i></i><i></i><i></i></span>
+      <span>{{ with .File }}{{ .ContentBaseName }}.md{{ else }}文章预览{{ end }}</span>
+    </div>
+    <div class="window-sheet">
+      {{- with (index (.GetTerms "categories") 0) }}
+      <p class="window-category">{{ .LinkTitle }}</p>
+      {{- end }}
+      <p class="window-title">{{ .Title }}</p>
+      <p class="window-summary">{{ .Summary | plainify | htmlUnescape }}</p>
+      <div class="window-bottom">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+        <span>阅读全文 <span aria-hidden="true">↗</span></span>
+      </div>
+    </div>
+  </a>
+  {{- end }}
+</section>
+{{- end }}

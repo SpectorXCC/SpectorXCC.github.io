@@ -1,0 +1,15 @@
+{{- $page := .page }}
+<article class="note-card">
+  <div class="note-card-body">
+    <div class="note-meta">
+      <time datetime="{{ $page.Date.Format "2006-01-02" }}">{{ $page.Date.Format "2006-01-02" }}</time>
+      {{- with (index ($page.GetTerms "categories") 0) }}
+      <span>{{ .LinkTitle }}</span>
+      {{- end }}
+      {{- if $page.Draft }}<span>草稿</span>{{ end }}
+    </div>
+    <h2><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
+    <p>{{ $page.Summary | plainify | htmlUnescape }}</p>
+  </div>
+  <span class="note-index" aria-hidden="true">{{ printf "%02d" .number }}</span>
+</article>

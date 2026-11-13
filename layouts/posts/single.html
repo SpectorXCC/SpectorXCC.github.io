@@ -1,0 +1,62 @@
+{{- define "main" }}
+<article class="post-single reading-post">
+  <header class="post-header">
+    {{- partial "breadcrumbs.html" . }}
+    {{- with (index (.GetTerms "categories") 0) }}
+    <a class="reading-category" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+    {{- end }}
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{- with (or .Description .Params.summary) }}
+    <div class="post-description">{{ . | markdownify }}</div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <div class="post-meta">
+      {{- partial "post_meta.html" . }}
+      {{- partial "translation_list.html" . }}
+      {{- partial "edit_post.html" . }}
+      {{- partial "post_canonical.html" . }}
+      {{- if .Draft }}<span class="draft-label">草稿</span>{{ end }}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- $hideCover := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $hideCover) }}
+  {{- if and (.Param "ShowToc") (in .TableOfContents "<li>") }}
+  <aside class="reading-outline" aria-label="文章目录">
+    <details class="toc" {{ if (.Param "TocOpen") }}open{{ end }}>
+      <summary>目录</summary>
+      <div class="inner">{{ .TableOfContents }}</div>
+    </details>
+  </aside>
+  {{- end }}
+
+  {{- with .Content }}
+  <div class="post-content md-content">
+    {{- if not ($.Param "disableAnchoredHeadings") }}
+      {{- partial "anchored_headings.html" . }}
+    {{- else }}
+      {{- . }}
+    {{- end }}
+  </div>
+  {{- end }}
+
+  {{- partial "extend_post_content.html" . }}
+  <footer class="post-footer">
+    {{- with .GetTerms "tags" }}
+    <ul class="post-tags">
+      {{- range . }}<li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>{{ end }}
+    </ul>
+    {{- end }}
+    {{- if (.Param "ShowPostNavLinks") }}
+      {{- partial "post_nav_links.html" . }}
+    {{- end }}
+    {{- if and site.Params.ShowShareButtons (ne .Params.disableShare true) }}
+      {{- partial "share_icons.html" . }}
+    {{- end }}
+  </footer>
+  {{- if (.Param "comments") }}
+    {{- partial "comments.html" . }}
+  {{- end }}
+</article>
+{{- end }}
