@@ -1,19 +1,41 @@
 {{- define "main" }}
 {{- $posts := where site.RegularPages "Type" "in" site.Params.mainSections }}
 {{- $posts = where $posts "Params.hiddenInHomeList" "ne" true }}
+{{- $ui := hugo.Data.ui }}
+<div id="pmsm-splash" class="pmsm-splash" role="region" aria-label="{{ $ui.motor.splash_aria_label }}">
+  <div id="pmsm-stage" class="pmsm-stage">
+    <svg id="pmsm-svg" viewBox="-122 -122 244 244" role="img" aria-label="{{ $ui.motor.svg_aria_label }}">
+      <defs>
+        <filter id="pmsm-glow-filter" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="4.5"/>
+        </filter>
+      </defs>
+      <circle r="110" fill="none" stroke="var(--pmsm-line)" stroke-width="1"/>
+      <circle r="46" fill="none" stroke="var(--pmsm-line)" stroke-width=".8" stroke-dasharray="1.5 4"/>
+      <g id="pmsm-gl" filter="url(#pmsm-glow-filter)" style="opacity:var(--pmsm-glow)"></g>
+      <g id="pmsm-st"></g>
+      <g id="pmsm-fa"></g>
+      <g id="pmsm-ro"></g>
+    </svg>
+  </div>
+  <p class="pmsm-splash-title">{{ $ui.motor.splash_title }}</p>
+  <p class="pmsm-splash-meta" id="pmsm-splash-meta" role="status" aria-live="polite">{{ $ui.motor.splash_init_meta }}</p>
+  <button type="button" id="pmsm-skip-btn" class="pmsm-skip-btn">{{ $ui.motor.splash_skip }}</button>
+</div>
 <div class="site-home">
   {{- partial "home_info.html" (dict "featured" (index ($posts | first 1) 0)) }}
+  {{- partial "work-showcase.html" . }}
   <section class="recent-notes" aria-labelledby="recent-notes-title">
     <div class="section-heading">
-      <h2 id="recent-notes-title">最近文章</h2>
+      <h2 id="recent-notes-title">{{ $ui.home.recent_posts_title }}</h2>
       {{- with site.GetPage "/posts" }}
-      <a href="{{ .RelPermalink }}">全部文章 <span aria-hidden="true">→</span></a>
+      <a href="{{ .RelPermalink }}">{{ $ui.home.recent_posts_all }} <span aria-hidden="true">→</span></a>
       {{- end }}
     </div>
     {{- range $i, $page := first 3 $posts }}
       {{- partial "note-card.html" (dict "page" $page "number" (add $i 1)) }}
     {{- else }}
-      <p class="empty-notes">这里会显示发布后的文章。</p>
+      <p class="empty-notes">{{ $ui.home.empty_posts }}</p>
     {{- end }}
   </section>
 </div>

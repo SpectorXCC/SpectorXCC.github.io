@@ -25,8 +25,12 @@ searchHidden: true
 - **Shell 与 Git**：用脚本处理重复任务，用版本管理保存修改。
 - **工程实践**：把实验过程整理成可复现的记录。
 
+## 代表作品
+
+{{< work_lockup id="guji-mailuo" >}}
+
+{{< work_summary id="guji-mailuo" >}}
+
 ## 关于本站
 
-本站使用 Hugo 生成，主题为 PaperMod，是《Linux基础及应用》课程大作业的起步项目。
-
-> 修改提示：在 `hugo.toml` 的 `[params.profile]` 中填入自己的姓名、专业、学校和照片路径，再把本页改成自己的介绍，最后删除这段提示。
+本站使用 Hugo 生成，主题为 PaperMod，统一采用配置、数据（`data/`）与 Markdown 正文分层维护的静态站点结构。

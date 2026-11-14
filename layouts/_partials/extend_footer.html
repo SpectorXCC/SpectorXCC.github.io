@@ -1,0 +1,12 @@
+{{- /* Footer custom content area start */ -}}
+{{- if .IsHome }}
+{{- with resources.Get "js/pmsm-loader.js" }}
+{{- $pmsmJs := . | resources.Minify | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $pmsmJs.RelPermalink }}" integrity="{{ $pmsmJs.Data.Integrity }}"></script>
+{{- end }}
+{{- end }}
+{{- with resources.Get "js/work-lockup-hover.js" }}
+{{- $lockupJs := . | resources.Minify | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $lockupJs.RelPermalink }}" integrity="{{ $lockupJs.Data.Integrity }}"></script>
+{{- end }}
+{{- /* Footer custom content area end */ -}}

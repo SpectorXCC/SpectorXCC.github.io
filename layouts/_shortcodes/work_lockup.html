@@ -1,0 +1,8 @@
+{{- $id := .Get "id" | default "guji-mailuo" -}}
+{{- $work := index (where hugo.Data.works "id" $id) 0 -}}
+{{- $src := .Get "src" | default $work.logo_static -}}
+{{- $anim := .Get "animated" | default $work.logo_animated -}}
+{{- $alt := .Get "alt" | default $work.logo_static_alt -}}
+<div class="work-logo-plaque work-logo-plaque-compact" data-hover-animate>
+  <img class="work-logo-full" src="{{ $src | relURL }}" data-static-src="{{ $src | relURL }}" data-animated-src="{{ $anim | relURL }}" alt="{{ $alt }}" width="468" height="128" loading="lazy" decoding="async">
+</div>

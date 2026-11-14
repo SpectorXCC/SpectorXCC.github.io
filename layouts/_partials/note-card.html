@@ -6,7 +6,7 @@
       {{- with (index ($page.GetTerms "categories") 0) }}
       <span>{{ .LinkTitle }}</span>
       {{- end }}
-      {{- if $page.Draft }}<span>草稿</span>{{ end }}
+      {{- if $page.Draft }}<span>{{ hugo.Data.ui.posts.draft_label }}</span>{{ end }}
     </div>
     <h2><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h2>
     <p>{{ $page.Summary | plainify | htmlUnescape }}</p>

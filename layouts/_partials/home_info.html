@@ -1,29 +1,58 @@
-{{- with site.Params.homeInfoParams }}
+{{- $profile := hugo.Data.profile -}}
+{{- $ui := hugo.Data.ui -}}
+{{- with $profile }}
 <section class="home-info personal-hero" aria-labelledby="intro-title">
   <div class="hero-intro">
     {{- with .eyebrow }}<p class="hero-eyebrow">{{ . }}</p>{{ end }}
     <h1 id="intro-title">
-      {{- .Title }}
+      {{- .greeting }}
       {{- with .signature }} <span class="hero-signature">{{ . }}</span>{{ end }}
     </h1>
-    <div class="hero-description">{{ .Content | markdownify }}</div>
+    <div class="hero-description">{{ .bio | markdownify }}</div>
     <div class="hero-actions">
       {{- with site.GetPage "/posts" }}
-      <a class="hero-button hero-primary" href="{{ .RelPermalink }}">开始浏览 <span aria-hidden="true">→</span></a>
+      <a class="hero-button hero-primary" href="{{ .RelPermalink }}">{{ $ui.home.primary_cta }} <span class="hero-arrow" aria-hidden="true">→</span></a>
       {{- end }}
       {{- with site.GetPage "/about" }}
-      <a class="hero-button hero-secondary" href="{{ .RelPermalink }}">关于我</a>
+      <a class="hero-button hero-secondary" href="{{ .RelPermalink }}">{{ $ui.home.secondary_cta }}</a>
       {{- end }}
     </div>
     {{- if site.Params.socialIcons }}
       {{- partial "social_icons.html" (dict) }}
     {{- end }}
   </div>
+  <div class="hero-visual-stack">
+    <section id="pmsm-widget" class="motor-widget" aria-label="{{ $ui.motor.widget_aria_label }}">
+      <div class="motor-widget-main">
+        <div id="pmsm-dock-slot" class="motor-dock-slot"></div>
+        <div class="motor-widget-info">
+          <div class="motor-widget-head">
+            <p class="motor-badge">{{ $ui.motor.badge }}</p>
+            <button type="button" id="pmsm-pause-btn" class="motor-pause-btn" aria-label="{{ $ui.motor.pause_aria_label }}">{{ $ui.motor.pause }}</button>
+          </div>
+          <p class="motor-title">{{ $ui.motor.title }}</p>
+          <p class="motor-readout" id="pmsm-card-readout">{{ $ui.motor.splash_init_meta }}</p>
+          <p class="motor-spec" id="pmsm-card-spec">{{ $ui.motor.spec_init }}</p>
+        </div>
+      </div>
+      <details class="motor-controls" id="pmsm-controls">
+        <summary>{{ $ui.motor.controls_summary }}</summary>
+        <div class="motor-controls-panel">
+          <div class="pmsm-sel" id="pmsm-sel" role="group" aria-label="{{ $ui.motor.poles_aria_label }}"></div>
+          <div class="pmsm-sel pmsm-sub" id="pmsm-qsel" role="group" aria-label="{{ $ui.motor.slots_aria_label }}"></div>
+          <div class="pmsm-bar">
+            <label for="pmsm-acc">{{ $ui.motor.speed_label }}</label>
+            <input id="pmsm-acc" type="range" min="30" max="1080" step="15" value="135" aria-label="{{ $ui.motor.speed_aria_label }}">
+            <span class="pmsm-v" id="pmsm-accv">{{ $ui.motor.speed_init_value }}</span>
+          </div>
+        </div>
+      </details>
+    </section>
   {{- with $.featured }}
-  <a class="article-window" href="{{ .RelPermalink }}" aria-label="阅读推荐文章：{{ .Title }}">
+  <a class="article-window" href="{{ .RelPermalink }}" aria-label="{{ $ui.home.featured_post_aria_prefix }}{{ .Title }}">
     <div class="window-bar" aria-hidden="true">
       <span class="window-dots"><i></i><i></i><i></i></span>
-      <span>{{ with .File }}{{ .ContentBaseName }}.md{{ else }}文章预览{{ end }}</span>
+      <span>{{ with .File }}{{ .ContentBaseName }}.md{{ else }}{{ $ui.home.featured_post_fallback_tab }}{{ end }}</span>
     </div>
     <div class="window-sheet">
       {{- with (index (.GetTerms "categories") 0) }}
@@ -33,10 +62,11 @@
       <p class="window-summary">{{ .Summary | plainify | htmlUnescape }}</p>
       <div class="window-bottom">
         <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-        <span>阅读全文 <span aria-hidden="true">↗</span></span>
+        <span>{{ $ui.home.preview_read_more }} <span class="window-arrow" aria-hidden="true">↗</span></span>
       </div>
     </div>
   </a>
   {{- end }}
+  </div>
 </section>
 {{- end }}

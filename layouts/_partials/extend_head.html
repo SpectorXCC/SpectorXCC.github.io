@@ -1,0 +1,17 @@
+{{- /* Head custom content area start */ -}}
+{{- if .IsHome }}
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('pmsm-loading');
+  }
+</script>
+<style>
+  .pmsm-splash{display:none}
+  html.pmsm-loading .pmsm-splash{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:radial-gradient(circle at 50% 44%,#f6f8fa,#d6dee6 75%);color:#1c2833}
+  html[data-theme="dark"].pmsm-loading .pmsm-splash{background:radial-gradient(circle at 50% 44%,#151b24,#07090d 75%);color:#e9eff5}
+  @media (prefers-color-scheme:dark){html:not([data-theme="light"]).pmsm-loading .pmsm-splash{background:radial-gradient(circle at 50% 44%,#151b24,#07090d 75%);color:#e9eff5}}
+  html.pmsm-loading .pmsm-stage{width:min(58vmin,300px);aspect-ratio:1/1}
+</style>
+<noscript><style>.pmsm-splash{display:none!important}</style></noscript>
+{{- end }}
+{{- /* Head custom content area end */ -}}

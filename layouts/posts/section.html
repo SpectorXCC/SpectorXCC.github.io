@@ -1,4 +1,5 @@
 {{- define "main" }}
+{{- $ui := hugo.Data.ui }}
 <div class="notes-page">
   <header class="notes-page-header">
     {{- partial "breadcrumbs.html" . }}
@@ -11,13 +12,13 @@
   {{- range $i, $page := $pager.Pages }}
     {{- partial "note-card.html" (dict "page" $page "number" (add $offset (add $i 1))) }}
   {{- else }}
-    <p class="empty-notes">这里会显示发布后的文章。</p>
+    <p class="empty-notes">{{ $ui.home.empty_posts }}</p>
   {{- end }}
   {{- if gt $pager.TotalPages 1 }}
-  <nav class="notes-pagination" aria-label="文章分页">
-    {{- if $pager.HasPrev }}<a href="{{ $pager.Prev.URL }}">← 上一页</a>{{ end }}
+  <nav class="notes-pagination" aria-label="{{ $ui.posts.pagination_aria_label }}">
+    {{- if $pager.HasPrev }}<a href="{{ $pager.Prev.URL }}">{{ $ui.posts.prev_page }}</a>{{ end }}
     <span>{{ $pager.PageNumber }} / {{ $pager.TotalPages }}</span>
-    {{- if $pager.HasNext }}<a href="{{ $pager.Next.URL }}">下一页 →</a>{{ end }}
+    {{- if $pager.HasNext }}<a href="{{ $pager.Next.URL }}">{{ $ui.posts.next_page }}</a>{{ end }}
   </nav>
   {{- end }}
 </div>

@@ -36,7 +36,7 @@ enableRobotsTXT = true
   description = "记录 Linux 学习、课程实验和代码实践。"
   keywords = ["Linux", "学习笔记", "Hugo", "课程实验"]
   mainSections = ["posts"]
-  defaultTheme = "dark"
+  defaultTheme = "auto"
   disableThemeToggle = false
   DateFormat = "2006.01.02"
   ShowReadingTime = true
@@ -54,22 +54,7 @@ enableRobotsTXT = true
   icon = "images/mark.svg"
   iconHeight = 25
 
-# ③ 首页简介；保留 homeInfoParams，课程会检查此项。
-[params.homeInfoParams]
-  Title = "你好，我是"
-  signature = "SpectorXCC"
-  Content = "这里记录我的 Linux 学习、课程实验和软件开发。"
-  eyebrow = "SPECTORXCC · PERSONAL SITE"
-
-# ④ 关于页个人资料。真实姓名、专业和个人照片需要你填写。
-[params.profile]
-  name = "待填写姓名"
-  major = "待填写专业"
-  school = "待填写学校"
-  photo = "images/avatar-placeholder.svg"
-  photoAlt = "个人照片占位图，请换成自己的照片"
-  tagline = "从命令行出发，记录学习中的每一步。"
-
+# 个人档案、首页简介文案与代表作品现已统一迁至 data/profile.yaml、data/works.yaml 与 data/ui.yaml
 [params.assets]
   favicon = "images/mark.svg"
   favicon16x16 = "images/mark-16.png"
@@ -101,23 +86,3 @@ enableRobotsTXT = true
   name = "关于"
   url = "/about/"
   weight = 20
-[[menus.main]]
-  identifier = "tags"
-  name = "标签"
-  url = "/tags/"
-  weight = 30
-[[menus.main]]
-  identifier = "categories"
-  name = "分类"
-  url = "/categories/"
-  weight = 40
-[[menus.main]]
-  identifier = "archives"
-  name = "归档"
-  url = "/archives/"
-  weight = 50
-[[menus.main]]
-  identifier = "search"
-  name = "搜索"
-  url = "/search/"
-  weight = 60

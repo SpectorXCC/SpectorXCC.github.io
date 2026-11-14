@@ -1,0 +1,39 @@
+{{- $id := .Get "id" | default "guji-mailuo" -}}
+{{- $work := index (where hugo.Data.works "id" $id) 0 -}}
+{{- $ui := hugo.Data.ui.work -}}
+{{- $url := .Get "url" | default $work.live_url -}}
+{{- $preview := .Get "preview" | default $work.preview.image -}}
+{{- $previewAlt := .Get "preview_alt" | default $work.preview.banner_alt -}}
+{{- $animated := .Get "animated" | default $work.logo_animated -}}
+{{- $animatedAlt := .Get "animated_alt" | default $work.logo_animated_alt -}}
+{{- $static := .Get "static" | default $work.logo_static -}}
+<section class="work-detail-banner" aria-label="{{ $ui.banner_aria_label }}">
+  <div class="work-detail-head">
+    <p class="work-kicker">{{ $ui.banner_deployment_prefix }}{{ strings.TrimPrefix "https://" $url }}</p>
+    <div class="work-detail-actions">
+      <button type="button" class="work-replay-btn" id="work-replay-btn" aria-label="{{ $ui.replay_aria_label }}"><span aria-hidden="true">↻</span> {{ $ui.replay_btn }}</button>
+      <a class="hero-button hero-primary work-btn-live" href="{{ $url }}" target="_blank" rel="noopener noreferrer">{{ $ui.banner_live_cta }} <span class="work-ext-arrow" aria-hidden="true">↗</span><span class="visually-hidden">{{ $ui.new_window_sr }}</span></a>
+    </div>
+  </div>
+  <figure class="work-logo-plaque work-logo-plaque-detail">
+    <picture>
+      <source srcset="{{ $static | relURL }}" media="(prefers-reduced-motion: reduce)">
+      <img id="work-animated-lockup" class="work-logo-full" src="{{ $animated | relURL }}" data-base-src="{{ $animated | relURL }}" alt="{{ $animatedAlt }}" width="468" height="128" decoding="async">
+    </picture>
+  </figure>
+  <figure class="work-detail-hero">
+    <img src="{{ $preview | relURL }}" alt="{{ $previewAlt }}" width="1920" height="1080" fetchpriority="high" decoding="async">
+  </figure>
+</section>
+<script>
+  (function () {
+    var btn = document.getElementById('work-replay-btn');
+    var img = document.getElementById('work-animated-lockup');
+    if (!btn || !img) return;
+    btn.addEventListener('click', function () {
+      var base = img.getAttribute('data-base-src') || '';
+      if (!base) return;
+      img.src = base + '?replay=' + Date.now();
+    });
+  })();
+</script>

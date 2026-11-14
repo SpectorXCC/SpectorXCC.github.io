@@ -15,7 +15,7 @@
       {{- partial "translation_list.html" . }}
       {{- partial "edit_post.html" . }}
       {{- partial "post_canonical.html" . }}
-      {{- if .Draft }}<span class="draft-label">草稿</span>{{ end }}
+      {{- if .Draft }}<span class="draft-label">{{ hugo.Data.ui.posts.draft_label }}</span>{{ end }}
     </div>
     {{- end }}
   </header>
@@ -23,9 +23,9 @@
   {{- $hideCover := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
   {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $hideCover) }}
   {{- if and (.Param "ShowToc") (in .TableOfContents "<li>") }}
-  <aside class="reading-outline" aria-label="文章目录">
+  <aside class="reading-outline" aria-label="{{ hugo.Data.ui.posts.toc_aria_label }}">
     <details class="toc" {{ if (.Param "TocOpen") }}open{{ end }}>
-      <summary>目录</summary>
+      <summary>{{ hugo.Data.ui.posts.toc_title }}</summary>
       <div class="inner">{{ .TableOfContents }}</div>
     </details>
   </aside>

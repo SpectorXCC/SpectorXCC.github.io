@@ -1,18 +1,26 @@
-{{- with site.Params.profile }}
-<section class="profile-panel" aria-label="个人简介">
+{{- $profile := hugo.Data.profile -}}
+{{- $ui := hugo.Data.ui.profile -}}
+{{- with $profile }}
+<section class="profile-panel" aria-label="{{ $ui.section_aria_label }}">
   <div>
-    <p class="profile-kicker">ABOUT ME</p>
+    {{- with .about_kicker }}<p class="profile-kicker">{{ . }}</p>{{ end }}
     <h2>{{ .name }}</h2>
-    <p class="profile-tagline">{{ .tagline }}</p>
+    {{- with .tagline }}<p class="profile-tagline">{{ . }}</p>{{ end }}
     <dl class="profile-facts">
-      <dt>姓名</dt><dd>{{ .name }}</dd>
-      <dt>专业</dt><dd>{{ .major }}</dd>
-      <dt>学校</dt><dd>{{ .school }}</dd>
+      <dt>{{ $ui.name_label }}</dt><dd>{{ .name }}</dd>
+      {{- with .major }}<dt>{{ $ui.major_label }}</dt><dd>{{ . }}</dd>{{ end }}
+      {{- with .school }}<dt>{{ $ui.school_label }}</dt><dd>{{ . }}</dd>{{ end }}
     </dl>
+    {{- with .school_logo }}
+    <div class="profile-university-badge">
+      <img src="{{ . | relURL }}" width="1657" height="450" alt="{{ $profile.school_logo_alt | default $profile.school }}" decoding="async">
+    </div>
+    {{- end }}
   </div>
+  {{- with .photo }}
   <figure class="profile-photo">
-    <img src="{{ .photo | relURL }}" width="240" height="300" alt="{{ .photoAlt }}">
-    {{- if eq .photo "images/avatar-placeholder.svg" }}<figcaption>请替换为自己的个人照片</figcaption>{{- end }}
+    <img src="{{ . | relURL }}" width="780" height="1134" alt="{{ $profile.photoAlt }}">
   </figure>
+  {{- end }}
 </section>
 {{- end }}

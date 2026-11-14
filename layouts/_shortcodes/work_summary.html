@@ -1,0 +1,10 @@
+{{- $id := .Get "id" | default "guji-mailuo" -}}
+{{- $work := index (where hugo.Data.works "id" $id) 0 -}}
+{{- $ui := hugo.Data.ui.work -}}
+{{- with $work }}
+{{- $detailPage := site.GetPage .detail_path -}}
+{{- $detailURL := cond (ne $detailPage nil) $detailPage.RelPermalink (printf "%s/" .detail_path | relURL) -}}
+<ul>
+  <li><strong><a href="{{ .live_url }}" target="_blank" rel="noopener noreferrer">{{ .title }}{{- with .subtitle_en }}（{{ . }}）{{ end }}</a></strong>：{{ .about_summary }} 更多设计细节与界面截图可见 <a href="{{ $detailURL }}">{{ $ui.about_detail_link }}</a>。</li>
+</ul>
+{{- end }}

@@ -1,4 +1,4 @@
 ---
-title: "文章"
-description: "Linux 学习笔记、课程实验和项目记录。"
+title: "实验报告"
+description: "Linux 课程实验操作记录与实践总结。"
 ---
