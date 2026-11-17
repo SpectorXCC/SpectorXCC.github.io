@@ -1,14 +1,19 @@
+{{- $hero := site.Params.homeInfoParams -}}
 {{- $profile := hugo.Data.profile -}}
 {{- $ui := hugo.Data.ui -}}
-{{- with $profile }}
+{{- if or $hero $profile }}
+{{- $eyebrow := or $hero.eyebrow $profile.eyebrow -}}
+{{- $title := or $hero.Title $profile.greeting -}}
+{{- $signature := or $hero.signature $profile.signature -}}
+{{- $content := or $hero.Content $profile.bio -}}
 <section class="home-info personal-hero" aria-labelledby="intro-title">
   <div class="hero-intro">
-    {{- with .eyebrow }}<p class="hero-eyebrow">{{ . }}</p>{{ end }}
+    {{- with $eyebrow }}<p class="hero-eyebrow">{{ . }}</p>{{ end }}
     <h1 id="intro-title">
-      {{- .greeting }}
-      {{- with .signature }} <span class="hero-signature">{{ . }}</span>{{ end }}
+      {{- $title }}
+      {{- with $signature }} <span class="hero-signature">{{ . }}</span>{{ end }}
     </h1>
-    <div class="hero-description">{{ .bio | markdownify }}</div>
+    <div class="hero-description">{{ $content | markdownify }}</div>
     <div class="hero-actions">
       {{- with site.GetPage "/posts" }}
       <a class="hero-button hero-primary" href="{{ .RelPermalink }}">{{ $ui.home.primary_cta }} <span class="hero-arrow" aria-hidden="true">→</span></a>

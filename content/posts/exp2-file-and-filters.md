@@ -1,6 +1,6 @@
 ---
 title: "实验二：Linux 文件管理及文件过滤实践"
-date: 2026-10-29T14:00:00+08:00
+date: 2026-11-12T14:00:00+08:00
 draft: false
 summary: "围绕文件与软硬链接管理、Vim 模式编辑以及 grep / sed / awk 管道统计完成全流程实操与思考总结。"
 categories: ["Linux 实验"]

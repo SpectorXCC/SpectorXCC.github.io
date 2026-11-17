@@ -24,7 +24,6 @@
 </div>
 <div class="site-home">
   {{- partial "home_info.html" (dict "featured" (index ($posts | first 1) 0)) }}
-  {{- partial "work-showcase.html" . }}
   <section class="recent-notes" aria-labelledby="recent-notes-title">
     <div class="section-heading">
       <h2 id="recent-notes-title">{{ $ui.home.recent_posts_title }}</h2>
@@ -38,5 +37,6 @@
       <p class="empty-notes">{{ $ui.home.empty_posts }}</p>
     {{- end }}
   </section>
+  {{- partial "work-showcase.html" . }}
 </div>
 {{- end }}

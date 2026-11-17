@@ -1,6 +1,6 @@
 ---
 title: "实验一：Linux 安装及基本命令练习"
-date: 2026-10-15T10:00:00+08:00
+date: 2026-11-10T10:00:00+08:00
 draft: false
 summary: "基于 VirtualBox 完成 Ubuntu 24.04 双网卡（NAT + Host-Only）部署、OVF 克隆与跨节点 SSH 免密连接实践。"
 categories: ["Linux 实验"]
@@ -44,10 +44,9 @@ ShowToc: true
   * **系统凭据**：配置初始登录口令并赋予 sudo 管理权限。
 * 等待系统文件解压与引导程序写入，重启并移除 ISO 介质，进入桌面环境。
 
-> **【截图 1 说明】**
-> * **建议文件名**：`s101.png`
-> * **截取内容**：系统设置中的“关于（About）”界面，或登录桌面后的系统属性窗口。
-> * **关键要素与验证目标**：清晰展示系统版本（Ubuntu 24.04 LTS）、硬件配置、计算机主机名（`chd2186`）及当前登录用户名（`caizhouyi2024902186`），证明操作系统安装与账户初始化成功。
+{{< shot src="images/experiments/exp1/s101.png" alt="截图 1：Ubuntu 系统信息与主机名配置结果" caption="截图 1：Ubuntu 系统信息与主机名配置结果" >}}
+
+*截图说明*：系统“关于（About）”界面显示操作系统为 `Ubuntu 24.04.4 LTS`，设备主机名为 `chd2186`，分配 6 核处理器、7.8 GiB 内存及 42.9 GB 磁盘空间，系统安装与初始化完成。
 
 ---
 
@@ -64,9 +63,10 @@ ip addr
 hostname -I
 ```
 
-回显可见系统配置了两个核心接口：
-* `enp0s3`：NAT 模式网卡，通过 DHCP 获取内网地址（如 `10.0.2.15/24`），负责外网通信。
+回显可见系统当前主要网络接口配置：
+* `enp0s3`：NAT 模式网卡，通过 DHCP 获取内网地址 `10.0.2.15/24`，负责外网通信。
 * `enp0s8`：Host-Only 网卡，分配地址为 `192.168.56.101/24`，负责宿主机与集群节点间通信。
+* `enp0s9`：局域网网卡，获取地址 `192.168.0.3/24`（另可见容器虚拟网桥 `docker0`）。
 
 #### 2. 外网与 DNS 解析连通性测试
 使用 ICMP 探测报文测试默认网关与外网链路连通性：
@@ -74,6 +74,10 @@ hostname -I
 ```bash
 ping -c 4 www.baidu.com
 ```
+
+{{< shot src="images/experiments/exp1/s102.png" alt="截图 2：网络接口配置与外网连通性测试" caption="截图 2：网络接口配置与外网连通性测试" >}}
+
+*截图说明*：终端依次执行 `ip addr`、`hostname -I` 与 `ping -c 4 www.baidu.com`，确认各网卡均已正确获取 IP 地址，外网探测发送与接收 4 个数据包，丢包率为 0%。
 
 #### 3. 检查并启用 SSH 服务
 为实现远程管理与跨主机互访，需保证 `openssh-server` 常驻运行并随开机自启：
@@ -89,10 +93,9 @@ systemctl status ssh
 sudo systemctl enable --now ssh
 ```
 
-> **【截图 2 说明】**
-> * **建议文件名**：`s102.png`
-> * **截取内容**：终端中执行 `ip addr`、`ping -c 4 www.baidu.com` 以及 `systemctl status ssh` 的回显信息。
-> * **关键要素与验证目标**：清晰展示 `enp0s8` 的内网 IP（`192.168.56.101`）、外网 ping 测试 0% 丢包回显，以及 SSH 服务状态显示为 `active (running)`，证明网络与远程管理守护进程已就绪。
+{{< shot src="images/experiments/exp1/s102_.png" alt="截图 2（续）：SSH 服务运行状态检查" caption="截图 2（续）：SSH 服务运行状态检查" >}}
+
+*截图说明*：执行 `systemctl status ssh` 查看 OpenBSD Secure Shell server 状态，回显为 `enabled` 且处于 `active (running)`，确认 SSH 远程连接服务已正常运行。
 
 ---
 

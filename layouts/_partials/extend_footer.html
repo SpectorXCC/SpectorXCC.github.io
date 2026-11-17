@@ -4,6 +4,10 @@
 {{- $pmsmJs := . | resources.Minify | fingerprint }}
 <script defer crossorigin="anonymous" src="{{ $pmsmJs.RelPermalink }}" integrity="{{ $pmsmJs.Data.Integrity }}"></script>
 {{- end }}
+{{- with resources.Get "js/work-tabs.js" }}
+{{- $tabsJs := . | resources.Minify | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $tabsJs.RelPermalink }}" integrity="{{ $tabsJs.Data.Integrity }}"></script>
+{{- end }}
 {{- end }}
 {{- with resources.Get "js/work-lockup-hover.js" }}
 {{- $lockupJs := . | resources.Minify | fingerprint }}

@@ -1,6 +1,6 @@
 ---
 title: "实验三：Linux Shell 编程及 Makefile 实践"
-date: 2026-11-12T16:00:00+08:00
+date: 2026-11-05T16:00:00+08:00
 draft: false
 summary: "围绕 Bash 条件判断、参数循环、带时间戳日志备份脚本与 Makefile 自动化构建开展实践（报告正文与截图待补充）。"
 categories: ["Linux 实验"]

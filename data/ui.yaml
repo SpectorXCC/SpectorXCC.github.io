@@ -3,6 +3,7 @@ home:
   secondary_cta: "关于我"
   featured_work_title: "代表作品"
   featured_work_more: "查看技术详情"
+  featured_work_tablist_aria: "代表作品切换"
   recent_posts_title: "实验报告"
   recent_posts_all: "全部实验"
   empty_posts: "这里会显示整理好的课程实验报告。"

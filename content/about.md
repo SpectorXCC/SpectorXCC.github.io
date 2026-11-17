@@ -31,6 +31,8 @@ searchHidden: true
 
 {{< work_summary id="guji-mailuo" >}}
 
+{{< work_summary id="polaplayer" >}}
+
 ## 关于本站
 
 本站使用 Hugo 生成，主题为 PaperMod，统一采用配置、数据（`data/`）与 Markdown 正文分层维护的静态站点结构。

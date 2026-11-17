@@ -54,7 +54,13 @@ enableRobotsTXT = true
   icon = "images/mark.svg"
   iconHeight = 25
 
-# 个人档案、首页简介文案与代表作品现已统一迁至 data/profile.yaml、data/works.yaml 与 data/ui.yaml
+# 首页个人简介（满足课程 [params.homeInfoParams] 核查项；关于页资料统一读取 data/profile.yaml）
+[params.homeInfoParams]
+  Title = "你好，我是"
+  signature = "SpectorXCC"
+  Content = "这里记录我的 Linux 学习、课程实验和软件开发。"
+  eyebrow = "SPECTORXCC · PERSONAL SITE"
+
 [params.assets]
   favicon = "images/mark.svg"
   favicon16x16 = "images/mark-16.png"
@@ -86,3 +92,23 @@ enableRobotsTXT = true
   name = "关于"
   url = "/about/"
   weight = 20
+[[menus.main]]
+  identifier = "tags"
+  name = "标签"
+  url = "/tags/"
+  weight = 30
+[[menus.main]]
+  identifier = "categories"
+  name = "分类"
+  url = "/categories/"
+  weight = 40
+[[menus.main]]
+  identifier = "archives"
+  name = "归档"
+  url = "/archives/"
+  weight = 50
+[[menus.main]]
+  identifier = "search"
+  name = "搜索"
+  url = "/search/"
+  weight = 60

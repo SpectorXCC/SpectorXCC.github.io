@@ -1,71 +1,116 @@
 {{- $ui := hugo.Data.ui -}}
 {{- $featured := where hugo.Data.works "featured" true -}}
-{{- with (index $featured 0) }}
-{{- $work := . -}}
-{{- $detailPage := site.GetPage $work.detail_path -}}
-{{- $detailURL := cond (ne $detailPage nil) $detailPage.RelPermalink (printf "%s/" $work.detail_path | relURL) -}}
+{{- if gt (len $featured) 0 }}
+{{- $firstWork := index $featured 0 -}}
+{{- $firstDetail := site.GetPage $firstWork.detail_path -}}
+{{- $firstDetailURL := cond (ne $firstDetail nil) $firstDetail.RelPermalink (printf "%s/" $firstWork.detail_path | relURL) -}}
 <section id="featured-work" class="featured-work" aria-labelledby="featured-work-title">
-  <div class="section-heading">
-    <h2 id="featured-work-title">{{ $ui.home.featured_work_title }}</h2>
-    <a href="{{ $detailURL }}">{{ $ui.home.featured_work_more }} <span aria-hidden="true">→</span></a>
-  </div>
-  <div class="work-showcase-wrap">
-    <article class="work-card">
-      <div class="work-card-info">
-        <div class="work-meta-row">
-          <p class="work-kicker">{{ $work.kicker }}</p>
-          {{- with $work.subtitle_en }}<span class="work-subtitle-en">{{ . }}</span>{{ end }}
-        </div>
-        <h3 class="visually-hidden">{{ $work.title }}{{- with $work.subtitle_en }}（{{ . }}）{{ end }}</h3>
-        <div class="work-logo-plaque" data-hover-animate>
-          <img class="work-logo-full" src="{{ $work.logo_static | relURL }}" data-static-src="{{ $work.logo_static | relURL }}" data-animated-src="{{ $work.logo_animated | relURL }}" alt="{{ $work.logo_static_alt }}" width="468" height="128" loading="lazy" decoding="async">
-        </div>
-        <p class="work-summary">{{ $work.summary }}</p>
-        {{- with $work.highlights }}
-        <ul class="work-highlights">
-          {{- range . }}
-          <li><strong>{{ .label }}</strong>：{{ .text }}</li>
-          {{- end }}
-        </ul>
-        {{- end }}
-        {{- with $work.tech }}
-        <ul class="work-tech" aria-label="{{ $ui.work.tech_aria_label }}">
-          {{- range . }}
-          <li>{{ . }}</li>
-          {{- end }}
-        </ul>
-        {{- end }}
-        <div class="work-actions">
-          <a class="hero-button hero-primary work-btn-live" href="{{ $work.live_url }}" target="_blank" rel="noopener noreferrer">{{ $ui.work.live_cta }} <span class="work-ext-arrow" aria-hidden="true">↗</span><span class="visually-hidden">{{ $ui.work.new_window_sr }}</span></a>
-          <a class="hero-button hero-secondary" href="{{ $detailURL }}">{{ $ui.work.detail_cta }} <span class="hero-arrow" aria-hidden="true">→</span></a>
-        </div>
-      </div>
-
-      {{- with $work.preview }}
-      <div class="work-card-media">
-        <a class="work-preview-frame" href="{{ $work.live_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .frame_aria_label }}">
-          <div class="window-bar" aria-hidden="true">
-            <span class="window-dots"><i></i><i></i><i></i></span>
-            <span class="work-preview-url">{{ $work.preview_host }}</span>
-            <span class="work-live-pill">{{ $work.live_pill }}</span>
-          </div>
-          <div class="work-screen">
-            <img src="{{ .image | relURL }}" alt="{{ .alt }}" width="1920" height="1080" loading="lazy" decoding="async">
-          </div>
-        </a>
-        {{- with .thumbs }}
-        <div class="work-thumb-grid">
-          {{- range . }}
-          <a class="work-thumb" href="{{ $detailURL }}{{ .anchor }}">
-            <img src="{{ .image | relURL }}" alt="" width="1920" height="1080" loading="lazy" decoding="async">
-            <span>{{ .label }}</span>
-          </a>
-          {{- end }}
-        </div>
+  <div class="section-heading work-heading-bar">
+    <div class="work-heading-left">
+      <h2 id="featured-work-title">{{ $ui.home.featured_work_title }}</h2>
+      {{- if gt (len $featured) 1 }}
+      <div class="work-tablist" role="tablist" aria-label="{{ $ui.home.featured_work_tablist_aria | default "代表作品切换" }}">
+        {{- range $i, $work := $featured }}
+        {{- $detailPage := site.GetPage $work.detail_path -}}
+        {{- $detailURL := cond (ne $detailPage nil) $detailPage.RelPermalink (printf "%s/" $work.detail_path | relURL) -}}
+        <button type="button"
+                class="work-tab"
+                role="tab"
+                id="work-tab-{{ $work.id }}"
+                data-work-target="{{ $work.id }}"
+                data-detail-url="{{ $detailURL }}"
+                aria-selected="{{ if eq $i 0 }}true{{ else }}false{{ end }}"
+                tabindex="{{ if eq $i 0 }}0{{ else }}-1{{ end }}">{{ $work.tab_label | default $work.title }}</button>
         {{- end }}
       </div>
       {{- end }}
-    </article>
+    </div>
+    <a id="featured-work-more" href="{{ $firstDetailURL }}">{{ $ui.home.featured_work_more }} <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="work-showcase-wrap">
+    {{- range $i, $work := $featured }}
+    {{- $detailPage := site.GetPage $work.detail_path -}}
+    {{- $detailURL := cond (ne $detailPage nil) $detailPage.RelPermalink (printf "%s/" $work.detail_path | relURL) -}}
+    {{- $liveURL := $work.live_url -}}
+    {{- $isRelativeDemo := strings.HasPrefix $liveURL "/" -}}
+    {{- $resolvedLiveURL := cond $isRelativeDemo (strings.TrimPrefix "/" $liveURL | relURL) $liveURL -}}
+    <div class="work-tabpanel"
+         id="work-panel-{{ $work.id }}"
+         role="tabpanel"
+         aria-labelledby="work-tab-{{ $work.id }}"
+         data-work-panel="{{ $work.id }}"
+         {{- if ne $i 0 }} hidden="until-found"{{ end }}>
+      <article class="work-card">
+        <div class="work-card-info">
+          <div class="work-meta-row">
+            <p class="work-kicker">{{ $work.kicker }}</p>
+            {{- with $work.subtitle_en }}<span class="work-subtitle-en">{{ . }}</span>{{ end }}
+          </div>
+          {{- if $work.logo_static }}
+          <h3 class="visually-hidden">{{ $work.title }}{{- with $work.subtitle_en }}（{{ . }}）{{ end }}</h3>
+          <div class="work-logo-plaque" data-hover-animate>
+            <img class="work-logo-full" src="{{ $work.logo_static | relURL }}" data-static-src="{{ $work.logo_static | relURL }}" data-animated-src="{{ $work.logo_animated | relURL }}" alt="{{ $work.logo_static_alt }}" width="468" height="128" loading="lazy" decoding="async">
+          </div>
+          {{- else if $work.app_icon }}
+          <div class="work-app-brand">
+            <img class="work-app-icon" src="{{ $work.app_icon | relURL }}" alt="{{ $work.app_icon_alt | default $work.title }}" width="512" height="512" loading="lazy" decoding="async">
+            <div class="work-app-titles">
+              <h3>{{ $work.title }}</h3>
+              {{- with $work.app_tagline }}<p class="work-app-tagline">{{ . }}</p>{{ end }}
+            </div>
+          </div>
+          {{- end }}
+          <p class="work-summary">{{ $work.summary }}</p>
+          {{- with $work.highlights }}
+          <ul class="work-highlights">
+            {{- range . }}
+            <li><strong>{{ .label }}</strong>：{{ .text }}</li>
+            {{- end }}
+          </ul>
+          {{- end }}
+          {{- with $work.tech }}
+          <ul class="work-tech" aria-label="{{ $ui.work.tech_aria_label }}">
+            {{- range . }}
+            <li>{{ . }}</li>
+            {{- end }}
+          </ul>
+          {{- end }}
+          <div class="work-actions">
+            <a class="hero-button hero-primary work-btn-live" href="{{ $resolvedLiveURL }}" target="_blank" rel="noopener noreferrer">{{ $work.live_cta | default $ui.work.live_cta }} <span class="work-ext-arrow" aria-hidden="true">↗</span><span class="visually-hidden">{{ $ui.work.new_window_sr }}</span></a>
+            <a class="hero-button hero-secondary" href="{{ $detailURL }}">{{ $ui.work.detail_cta }} <span class="hero-arrow" aria-hidden="true">→</span></a>
+            {{- with $work.repo_url }}
+            <a class="hero-button hero-secondary" href="{{ . }}" target="_blank" rel="noopener noreferrer">GitHub <span class="work-ext-arrow" aria-hidden="true">↗</span><span class="visually-hidden">{{ $ui.work.new_window_sr }}</span></a>
+            {{- end }}
+          </div>
+        </div>
+
+        {{- with $work.preview }}
+        <div class="work-card-media">
+          <a class="work-preview-frame" href="{{ $resolvedLiveURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ .frame_aria_label }}">
+            <div class="window-bar" aria-hidden="true">
+              <span class="window-dots"><i></i><i></i><i></i></span>
+              <span class="work-preview-url">{{ $work.preview_host }}</span>
+              <span class="work-live-pill">{{ $work.live_pill }}</span>
+            </div>
+            <div class="work-screen">
+              <img src="{{ .image | relURL }}" alt="{{ .alt }}" width="1920" height="1080" loading="lazy" decoding="async">
+            </div>
+          </a>
+          {{- with .thumbs }}
+          <div class="work-thumb-grid">
+            {{- range . }}
+            <a class="work-thumb" href="{{ $detailURL }}{{ .anchor }}">
+              <img src="{{ .image | relURL }}" alt="" width="1920" height="1080" loading="lazy" decoding="async">
+              <span>{{ .label }}</span>
+            </a>
+            {{- end }}
+          </div>
+          {{- end }}
+        </div>
+        {{- end }}
+      </article>
+    </div>
+    {{- end }}
   </div>
 </section>
 {{- end }}
